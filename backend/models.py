@@ -5,6 +5,8 @@ from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.sql import func
+from datetime import datetime
+
 
 # Definitions of tables and associated schema constructs
 metadata = MetaData()
@@ -38,9 +40,11 @@ class Plan(db.Model, SerializerMixin):
 
 class Expense(db.Model, SerializerMixin):
     __tablename__ = 'expense_table'
+    serialize_rules = ['-plan']
 
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String)
     amount = db.Column(db.Float, nullable=False)
     
     plan_id = db.Column(db.Integer, db.ForeignKey('plan_table.id'))

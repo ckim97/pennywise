@@ -1,0 +1,28 @@
+{
+  "plans": [
+    {
+      "id": 1,
+      "monthlyIncome": 3000,
+      "savingsPercentage": 25,
+      "billsPercentage": 25,
+      "entertainmentPercentage": 25,
+      "foodPercentage": 25
+    },
+    {
+      "monthlyIncome": 4000,
+      "savingsPercentage": 20,
+      "billsPercentage": 30,
+      "entertainmentPercentage": 25,
+      "foodPercentage": 25,
+      "id": 2
+    },
+    {
+      "monthlyIncome": "5000",
+      "savings": "35",
+      "bills": "25",
+      "entertainment": "20",
+      "food": "20",
+      "id": 3
+    }
+  ]
+}

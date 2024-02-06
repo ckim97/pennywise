@@ -55,6 +55,18 @@ def post_plan():
         return {"errors": str(e)}, 400
     
 #EXPENSES
+    
+@app.get('/expenses/<int:id>')
+def get_expenses_by_plan_id(id):
+    try:
+        expenses = Expense.query.filter_by(plan_id=id).all()
+        expense_list = [{'id': expense.id, 'category': expense.category, 'amount': expense.amount} for expense in expenses]
+        return expense_list, 200
+    except Exception as e:
+        print(e)
+        return {"errors": str(e)}, 500
+        
+
 @app.post('/expenses')
 def post_expenses():
     try:
@@ -71,6 +83,7 @@ def post_expenses():
     except Exception as e:
         print(e)
         return {"errors": str(e)}, 400
+
         
 
 

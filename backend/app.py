@@ -60,8 +60,8 @@ def post_plan():
 def get_expenses_by_plan_id(id):
     try:
         expenses = Expense.query.filter_by(plan_id=id).all()
-        expense_list = [{'id': expense.id, 'category': expense.category, 'amount': expense.amount} for expense in expenses]
-        return expense_list, 200
+        expense_list = [{'id': expense.id, 'category': expense.category, 'amount': expense.amount, 'description': expense.description} for expense in expenses]
+        return {'expenses':expense_list}, 200
     except Exception as e:
         print(e)
         return {"errors": str(e)}, 500

@@ -2,7 +2,7 @@
 # See https://github.com/flutter/flutter/issues/128635 for more context.
 .venv/
 .env
-
+node_modules/
 # Miscellaneous
 *.class
 *.lock
@@ -167,7 +167,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/

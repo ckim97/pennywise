@@ -17,9 +17,12 @@ db = SQLAlchemy(metadata=metadata)
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'user_table'
+    serialize_rules = ['-plan']
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
+    password = db.Column(db.String, unique=True, nullable=False)
     
     plan = db.relationship('Plan', back_populates='user', cascade='all, delete-orphan')
 

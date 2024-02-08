@@ -39,6 +39,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   curved_navigation_bar: ^1.0.3
   fl_chart: ^0.66.1
+  firebase_core: ^2.25.4
+  firebase_auth: ^4.17.4
+  cloud_firestore: ^4.15.4
+  flutter_signin_button: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -853,7 +853,7 @@ class _FirstPageState extends State<FirstPage> {
                             child: BarChart(
                               BarChartData(
                                 alignment: BarChartAlignment.center,
-                                groupsSpace: 20,
+                                groupsSpace: 40,
                                 barGroups: [
                                   BarChartGroupData(
                                     x: 0,
@@ -861,7 +861,7 @@ class _FirstPageState extends State<FirstPage> {
                                     barRods: [
                                       BarChartRodData(
                                         fromY: 0,
-                                        toY: _plan.monthly_income * (_plan.savings / 100), // Convert to percentage
+                                        toY: categoryTotalExpenses['Savings'] ?? 0,
                                         width: 16,
                                         color: Colors.blue,
                                       ),
@@ -873,7 +873,7 @@ class _FirstPageState extends State<FirstPage> {
                                     barRods: [
                                       BarChartRodData(
                                         fromY: 0,
-                                        toY: _plan.monthly_income * (_plan.bills / 100), // Convert to percentage
+                                        toY: categoryTotalExpenses['Bills'] ?? 0,
                                         width: 16,
                                         color: Colors.green,
                                       ),
@@ -885,7 +885,7 @@ class _FirstPageState extends State<FirstPage> {
                                     barRods: [
                                       BarChartRodData(
                                         fromY: 0,
-                                        toY: _plan.monthly_income * (_plan.entertainment / 100), // Convert to percentage
+                                        toY: categoryTotalExpenses['Entertainment'] ?? 0,
                                         width: 16,
                                         color: Colors.orange,
                                       ),
@@ -897,7 +897,7 @@ class _FirstPageState extends State<FirstPage> {
                                     barRods: [
                                       BarChartRodData(
                                         fromY: 0,
-                                        toY: _plan.monthly_income * (_plan.food / 100), // Convert to percentage
+                                        toY: categoryTotalExpenses['Food'] ?? 0,
                                         width: 16,
                                         color: Colors.red,
                                       ),
@@ -918,13 +918,13 @@ class _FirstPageState extends State<FirstPage> {
                                       getTitlesWidget: (double value, TitleMeta meta) {
                                         switch (value.toInt()) {
                                           case 0:
-                                            return Text('Savings');
+                                            return Text('Savings', style: TextStyle(fontSize: 10));
                                           case 1:
-                                            return Text('Bills');
+                                            return Text('Bills', style: TextStyle(fontSize: 10));
                                           case 2:
-                                            return Text('Entertainment');
+                                            return Text('Entertainment', style: TextStyle(fontSize: 10));
                                           case 3:
-                                            return Text('Food');
+                                            return Text('Food', style: TextStyle(fontSize: 10));
                                           default:
                                             return Container(); // Return an empty container or another default widget if needed
                                         }

@@ -77,12 +77,28 @@ def post_plan():
 def get_expenses_by_plan_id(id):
     try:
         expenses = Expense.query.filter_by(plan_id=id).all()
-        expense_list = [{'id': expense.id, 'category': expense.category, 'amount': expense.amount, 'description': expense.description} for expense in expenses]
+        expense_list = [{'id': expense.id, 'category': expense.category, 'amount': expense.amount, 'description': expense.description, 'plan_id': expense.plan_id} for expense in expenses]
         return {'expenses':expense_list}, 200
     except Exception as e:
         print(e)
         return {"errors": str(e)}, 500
         
+# @app.get('/patchexpenses/<int:id>')
+# def get_expense_by_id(id):
+#     current_expense = db.session.get(Expense, id)
+#     if not current_expense:
+#         return {"error": "Post not found"}, 404
+#     return current_expense.to_dict(), 200
+
+@app.get('/expense/<int:id>')
+def get_expense_by_id(id):
+    print(f"Fetching expense by ID: {id}")
+    current_expense = db.session.get(Expense, id)
+    if not current_expense:
+        return {"error": "Post not found"}, 404
+    return current_expense.to_dict(), 200
+
+
 
 @app.post('/expenses')
 def post_expenses():
@@ -101,13 +117,14 @@ def post_expenses():
         print(e)
         return {"errors": str(e)}, 400
     
-@app.patch('/expenses/<int:id>')
+@app.patch('/patchexpenses/<int:id>')
 def patch_expense(id):
     current_expense = db.session.get(Expense, id)
     if not current_expense:
         return {"error": "Post not found"}, 404
     try:
         data = request.json
+        print(data)
         for key in data:
             setattr(current_expense, key, data[key])
             db.session.add(current_expense)
@@ -125,41 +142,23 @@ def get_users():
     return {'users' : [user.to_dict() for user in users]}
 
 
-# @app.post("/api/users")
-# def signup():
-#     try:
-#         data = request.json
-#         password_hash = bcrypt.generate_password_hash(data.get("password"))
-#         new_user = User(
-#             name=data.get("name"),
-#             age=int(data.get("age")),
-#             social=data.get("social"),
-#             username=data.get("username"),
-#             password=password_hash,
-#         )
-#         db.session.add(new_user)
-#         db.session.commit()
-#         return new_user.to_dict(), 201
-#     except Exception as e:
-#         print("error in signup: " + str(e))
-#         return {"errors": ["validation errors"]}, 400
-
 @app.post('/users')
 def post_user():
     try:
         data = request.json
+        hashed_password = bcrypt.generate_password_hash(data.get("password")).decode('utf-8')
         firebase_user = auth.create_user(
             email=data.get("email"),
             email_verified=False,
-            password=data.get("password"),
+            password=hashed_password,
             display_name=data.get("username"),
             disabled=False
         )
-        hashed_password = bcrypt.generate_password_hash(data.get("password")).decode('utf-8')
+        
         new_user = User(
             username = data.get("username"),
             email = data.get("email"),
-            password = data.get("password")
+            password = hashed_password
         )
         db.session.add(new_user)
         db.session.commit()

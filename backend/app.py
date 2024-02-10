@@ -127,12 +127,12 @@ def patch_expense(id):
         print(data)
         for key in data:
             setattr(current_expense, key, data[key])
-            db.session.add(current_expense)
-            db.session.commit()
-            return current_expense.to_dict(202)
+        db.session.add(current_expense)
+        db.session.commit()
+        return current_expense.to_dict(), 202
     except Exception as e:
         print(e)
-        return {"errors": ["validation errors"]}, 400
+        return {"errors unknown": ["validation errors"]}, 400
     
 #users
     

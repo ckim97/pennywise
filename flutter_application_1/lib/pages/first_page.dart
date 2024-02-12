@@ -1,4 +1,3 @@
- // open bar attempts// 
 
 // import 'package:flutter/material.dart';
 // import 'package:flutter_application_1/fetch_requests.dart';
@@ -67,7 +66,7 @@
 //       });
 //       return _plan;
 //     } catch (e) {
-//       print('Error fetching plan: $e');
+//       print('Yo Error fetching plan: $e');
 //       rethrow;
 //     }
 //   }
@@ -190,7 +189,7 @@
 //                             child: BarChart(
 //                               BarChartData(
 //                                 alignment: BarChartAlignment.center,
-//                                 groupsSpace: 20,
+//                                 groupsSpace: 40,
 //                                 barGroups: [
 //                                   BarChartGroupData(
 //                                     x: 0,
@@ -198,7 +197,7 @@
 //                                     barRods: [
 //                                       BarChartRodData(
 //                                         fromY: 0,
-//                                         toY: _plan.monthly_income * (_plan.savings / 100), // Convert to percentage
+//                                         toY: categoryTotalExpenses['Savings'] ?? 0,
 //                                         width: 16,
 //                                         color: Colors.blue,
 //                                       ),
@@ -210,7 +209,7 @@
 //                                     barRods: [
 //                                       BarChartRodData(
 //                                         fromY: 0,
-//                                         toY: _plan.monthly_income * (_plan.bills / 100), // Convert to percentage
+//                                         toY: categoryTotalExpenses['Bills'] ?? 0,
 //                                         width: 16,
 //                                         color: Colors.green,
 //                                       ),
@@ -222,7 +221,7 @@
 //                                     barRods: [
 //                                       BarChartRodData(
 //                                         fromY: 0,
-//                                         toY: _plan.monthly_income * (_plan.entertainment / 100), // Convert to percentage
+//                                         toY: categoryTotalExpenses['Entertainment'] ?? 0,
 //                                         width: 16,
 //                                         color: Colors.orange,
 //                                       ),
@@ -234,7 +233,7 @@
 //                                     barRods: [
 //                                       BarChartRodData(
 //                                         fromY: 0,
-//                                         toY: _plan.monthly_income * (_plan.food / 100), // Convert to percentage
+//                                         toY: categoryTotalExpenses['Food'] ?? 0,
 //                                         width: 16,
 //                                         color: Colors.red,
 //                                       ),
@@ -255,13 +254,13 @@
 //                                       getTitlesWidget: (double value, TitleMeta meta) {
 //                                         switch (value.toInt()) {
 //                                           case 0:
-//                                             return Text('Savings');
+//                                             return Text('Savings', style: TextStyle(fontSize: 10));
 //                                           case 1:
-//                                             return Text('Bills');
+//                                             return Text('Bills', style: TextStyle(fontSize: 10));
 //                                           case 2:
-//                                             return Text('Entertainment');
+//                                             return Text('Entertainment', style: TextStyle(fontSize: 10));
 //                                           case 3:
-//                                             return Text('Food');
+//                                             return Text('Food', style: TextStyle(fontSize: 10));
 //                                           default:
 //                                             return Container(); // Return an empty container or another default widget if needed
 //                                         }
@@ -284,6 +283,25 @@
 //     );
 //   }
 // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 import 'package:flutter/material.dart';
@@ -342,18 +360,32 @@ class _FirstPageState extends State<FirstPage> {
     try {
       final result = await apiService.get('plans/1');
       final planData = result;
-      setState(() {
-        _plan = Plan(
-          monthly_income: planData['monthly_income'],
-          savings: planData['savings'],
-          bills: planData['bills'],
-          entertainment: planData['entertainment'],
-          food: planData['food'],
-        );
-      });
+
+      if (planData == null) {
+        setState(() {
+          _plan = Plan(
+            monthly_income: 0,
+            savings: 0,
+            bills: 0,
+            entertainment: 0,
+            food: 0,
+          );
+        });
+      } else {
+        setState(() {
+          _plan = Plan(
+            monthly_income: planData['monthly_income'],
+            savings: planData['savings'],
+            bills: planData['bills'],
+            entertainment: planData['entertainment'],
+            food: planData['food'],
+          );
+        });
+      }
+
       return _plan;
     } catch (e) {
-      print('Error fetching plan: $e');
+      print('Yo Error fetching plan: $e');
       rethrow;
     }
   }
@@ -396,8 +428,8 @@ class _FirstPageState extends State<FirstPage> {
                     return CircularProgressIndicator();
                   } else if (planSnapshot.hasError) {
                     return Text('Error fetching plan: ${planSnapshot.error}');
-                  } else if (!planSnapshot.hasData) {
-                    return Text('No plan data available');
+                  } else if (!planSnapshot.hasData || _plan.monthly_income == 0) {
+                    return Text('Please enter a plan.');
                   } else {
                     final plan = planSnapshot.data!;
 
@@ -422,7 +454,7 @@ class _FirstPageState extends State<FirstPage> {
                   }
                 },
               ),
-              SizedBox(height: 16),
+              
               FutureBuilder<List<dynamic>>(
                 future: _expensesFuture,
                 builder: (context, expensesSnapshot) {
@@ -470,9 +502,9 @@ class _FirstPageState extends State<FirstPage> {
                           ),
                         ),
                         SizedBox(height: 16),
-                        if (_plan != null) // Check if _plan is not null before using it
+                        if (_plan != null && _plan.monthly_income != 0)
                           Container(
-                            height: 300, // Adjust the height according to your needs
+                            height: 300,
                             child: BarChart(
                               BarChartData(
                                 alignment: BarChartAlignment.center,
@@ -549,7 +581,7 @@ class _FirstPageState extends State<FirstPage> {
                                           case 3:
                                             return Text('Food', style: TextStyle(fontSize: 10));
                                           default:
-                                            return Container(); // Return an empty container or another default widget if needed
+                                            return Container();
                                         }
                                       },
                                     ),

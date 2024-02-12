@@ -45,10 +45,27 @@ def index():
 
 @app.get("/plans/<int:id>")
 def get_plan_by_id(id):
-    plan = db.session.get(Plan, id)
+    plan = Plan.query.filter_by(user_id=id).first()
+    # plan = db.session.get(Plan, id)
     if not plan:
-        return {"error": "Post not found"}, 404
+        return {"error": "Plan not found"}, 404
     return plan.to_dict(), 200
+
+@app.patch('/plans/<int:id>')
+def patch_plan_by_user_id(id):
+    plan = Plan.query.filter_by(user_id=id).first()
+    if not plan:
+        return {"error": "Plan not found"}, 404
+    try:
+        data = request.json
+        for key in data:
+            setattr(plan, key, data[key])
+        db.session.add(plan)
+        db.session.commit()
+        return plan.to_dict(), 202
+    except Exception as e:
+        print(e)
+        return {"errors": ["validation errors"]}, 400
 
 @app.post("/plans")
 def post_plan():
@@ -70,6 +87,17 @@ def post_plan():
     except Exception as e:
         print(e)
         return {"errors": str(e)}, 400
+    
+@app.delete('/plans/<int:id>')
+def delete_plan_by_user_id(id):
+    plan = Plan.query.filter_by(user_id=id).first()
+    if not plan:
+        return {"error": "Plan not found"}, 404
+    db.session.delete(plan)
+    db.session.commit()
+    return {}, 204
+
+
     
 #EXPENSES
     

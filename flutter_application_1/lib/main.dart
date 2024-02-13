@@ -1,4 +1,4 @@
-// WORKING MAIN // 
+// WORKING MAIN 
 
 
 // import 'package:flutter/material.dart';
@@ -83,6 +83,8 @@
 
 
 
+// practice tues //
+
 
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -125,6 +127,21 @@ class _MyAppState extends State<MyApp> {
             setState(() {
               _currentIndex = index;
             });
+            // Handle navigation based on index here
+            switch (index) {
+              case 0:
+                // Navigate to ExpensePage
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ExpensePage()));
+                break;
+              case 1:
+                // Navigate to FirstPage
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstPage()));
+                break;
+              case 2:
+                // Navigate to PlanPage
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PlanPage()));
+                break;
+            }
           },
         ),
       ),
@@ -145,6 +162,3 @@ class _MyAppState extends State<MyApp> {
     }
   }
 }
-
-
-

@@ -248,6 +248,7 @@
 
 
 
+//testing phase //
 
 
 
@@ -271,7 +272,6 @@ class _PlanPageState extends State<PlanPage> {
 
   ApiService apiService = ApiService('http://localhost:5555');
   int userId = 1; // Hardcoded user id for now
-  bool planExists = false;
 
   @override
   void initState() {
@@ -289,7 +289,6 @@ class _PlanPageState extends State<PlanPage> {
           billsController.text = result['bills']?.toString() ?? '';
           entertainmentController.text = result['entertainment']?.toString() ?? '';
           foodController.text = result['food']?.toString() ?? '';
-          planExists = true;
         });
       }
     } catch (e) {
@@ -307,9 +306,7 @@ class _PlanPageState extends State<PlanPage> {
         print('Failed to update plan. Errors: ${response['errors']}');
       } else {
         print('Plan updated successfully');
-        setState(() {
-          planExists = true;
-        });
+        checkExistingPlan(); // Refresh the plan after update
       }
     } catch (e) {
       print('Exception during plan update: $e');
@@ -323,28 +320,45 @@ class _PlanPageState extends State<PlanPage> {
       await apiService.delete(endpoint);
       print('Plan deleted successfully');
 
-      incomeController.text = '';
-      savingsController.text = '';
-      billsController.text = '';
-      entertainmentController.text = '';
-      foodController.text = '';
-
+      // Clear the existing plan details
       setState(() {
-        planExists = false;
+        incomeController.text = '';
+        savingsController.text = '';
+        billsController.text = '';
+        entertainmentController.text = '';
+        foodController.text = '';
       });
 
+      // Show a snackbar to indicate successful deletion
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Plan deleted successfully'),
         ),
       );
+
+      setState(() {});
+      checkExistingPlan();
+      _buildPlanForm();
+
     } catch (e) {
       print('Exception during plan deletion: $e');
     }
   }
 
+
+
+
+
+
+
+
   Widget _buildPageContent() {
-    if (planExists) {
+    // Check if any of the controllers has a non-empty value
+    if (incomeController.text.isNotEmpty ||
+        savingsController.text.isNotEmpty ||
+        billsController.text.isNotEmpty ||
+        entertainmentController.text.isNotEmpty ||
+        foodController.text.isNotEmpty) {
       return _buildPlanView();
     } else {
       return _buildPlanForm();
@@ -383,22 +397,12 @@ class _PlanPageState extends State<PlanPage> {
                 };
 
                 await updatePlan(updatedPlanData);
-
-                setState(() {
-                  planExists = true;
-                });
               },
               child: Text('Update Plan'),
             ),
             ElevatedButton(
               onPressed: () {
-                deletePlan().then((_) {
-                  if (Navigator.canPop(context)) {
-                    Navigator.pop(context);
-                  } else {
-                    print('Context is not valid for navigation.');
-                  }
-                });
+                deletePlan();
               },
               style: ElevatedButton.styleFrom(primary: Colors.red),
               child: Text('Delete Plan'),
@@ -416,14 +420,14 @@ class _PlanPageState extends State<PlanPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            width: 150,
+            width: 150, // Set a fixed width for the category labels
             child: Text(
               label + ':',
               style: TextStyle(fontSize: 16),
             ),
           ),
           Container(
-            width: 150,
+            width: 150, // Set a fixed width for the text boxes
             child: TextFormField(
               controller: controller,
               keyboardType: TextInputType.number,
@@ -445,9 +449,7 @@ class _PlanPageState extends State<PlanPage> {
         _buildCategoryField('Percent Allocation for Savings', savingsController),
         _buildCategoryField('Percent Allocation for Bills', billsController),
         _buildCategoryField(
-          'Percent Allocation for Entertainment',
-          entertainmentController,
-        ),
+            'Percent Allocation for Entertainment', entertainmentController),
         _buildCategoryField('Percent Allocation for Food', foodController),
         SizedBox(height: 20),
         ElevatedButton(
@@ -463,9 +465,7 @@ class _PlanPageState extends State<PlanPage> {
 
             try {
               await apiService.post('plans', planData);
-              setState(() {
-                planExists = true;
-              });
+              checkExistingPlan(); // Refresh the plan after submission
             } catch (e) {
               print('Failed to save plan: $e');
             }

@@ -1,37 +1,4 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_application_1/pages/first_page.dart';
-// import 'package:flutter_application_1/pages/expenses.dart';
-// import 'package:flutter_application_1/pages/plan.dart';
-
-
-// void main() {
-//   runApp(const MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: FirstPage(),
-//       routes: {
-//         '/firstpage': (context) => FirstPage(),
-//         '/expensespage': (context) => ExpensePage(),
-//         '/planpage': (context) => PlanPage(),
-//       },
-      
-//     );
-//   }
-// }
-
-
-
-
-
-
+// WORKING MAIN // 
 
 
 // import 'package:flutter/material.dart';
@@ -78,23 +45,21 @@
 //             // Handle navigation based on index here
 //             switch (index) {
 //               case 0:
-//                 Navigator.pushNamed(context, '/expensespage');
+//                 // Navigate to ExpensePage
+//                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ExpensePage()));
 //                 break;
 //               case 1:
-//                 Navigator.pushNamed(context, '/firstpage');
+//                 // Navigate to FirstPage
+//                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstPage()));
 //                 break;
 //               case 2:
-//                 Navigator.pushNamed(context, '/planpage');
+//                 // Navigate to PlanPage
+//                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PlanPage()));
 //                 break;
 //             }
 //           },
 //         ),
 //       ),
-//       routes: {
-//         '/firstpage': (context) => FirstPage(),
-//         '/expensespage': (context) => ExpensePage(),
-//         '/planpage': (context) => PlanPage(),
-//       },
 //     );
 //   }
 
@@ -112,6 +77,11 @@
 //     }
 //   }
 // }
+
+
+
+
+
 
 
 import 'package:flutter/material.dart';
@@ -155,21 +125,6 @@ class _MyAppState extends State<MyApp> {
             setState(() {
               _currentIndex = index;
             });
-            // Handle navigation based on index here
-            switch (index) {
-              case 0:
-                // Navigate to ExpensePage
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ExpensePage()));
-                break;
-              case 1:
-                // Navigate to FirstPage
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstPage()));
-                break;
-              case 2:
-                // Navigate to PlanPage
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PlanPage()));
-                break;
-            }
           },
         ),
       ),
@@ -190,3 +145,6 @@ class _MyAppState extends State<MyApp> {
     }
   }
 }
+
+
+

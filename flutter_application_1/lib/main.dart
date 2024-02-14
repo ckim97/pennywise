@@ -31,9 +31,9 @@ class _MyAppState extends State<MyApp> {
           animationDuration: Duration(milliseconds: 300),
           index: _currentIndex,
           items: [
-            Icon(Icons.money),
-            Icon(Icons.home),
-            Icon(Icons.circle),
+            Icon(Icons.post_add),
+            Icon(Icons.bar_chart_sharp),
+            Icon(Icons.edit_note),
           ],
           onTap: (index) {
             setState(() {

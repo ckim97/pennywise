@@ -56,5 +56,4 @@ class ApiService {
       throw Exception('Request failed with status: ${response.statusCode}');
     }
   }
-
 }

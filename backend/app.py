@@ -162,6 +162,16 @@ def patch_expense(id):
         print(e)
         return {"errors unknown": ["validation errors"]}, 400
     
+
+@app.delete('/expenses/<int:id>')
+def delete_expense_by_id(id):
+    current_expense = db.session.get(Expense, id)
+    if not current_expense:
+        return {"error": "Plan not found"}, 404
+    db.session.delete(current_expense)
+    db.session.commit()
+    return {}, 204
+    
 #users
     
 @app.get('/users')
